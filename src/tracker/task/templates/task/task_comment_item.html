@@ -1,0 +1,17 @@
+<div style="padding-right: 10%; padding-left: 5%; padding-bottom: 5%">
+
+
+    <span>{{ comment.user.username }} @{{ comment.created | format_epoch_timestamp_as_datetime }}</span>
+    <span style="padding-left: 5%; float: right">
+            <form id="delete"
+                  action="{{ url_for('task_bp.task_delete_comment',username=comment.user.username, symbol=board.symbol, number=task.number, comment=comment.number) }}"
+                  method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <button type="submit" name="delete" value="delete" class="comment-link">delete</button>
+            </form>
+        </span>
+
+    <hr>
+    {{ comment.contents }}
+
+</div>

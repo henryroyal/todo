@@ -1,0 +1,15 @@
+{% extends "navigation/base.html" %}
+
+{% block css %}
+    <link rel="stylesheet" href="/assets/custom.css">
+{% endblock %}
+
+{% block content %}
+
+    {% for result in results %}
+
+        <p>{{ result }}</p>
+
+    {% endfor %}
+
+{% endblock %}

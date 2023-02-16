@@ -1,0 +1,10 @@
+<tr>
+    <th>{{ user_summary.board_symbol }}</th>
+    <th>{{ user_summary.board_creator }}</th>
+    <th>{{ user_summary.username }}</th>
+    <th>{{ user_summary.role }}</th>
+    <th>{% if user_summary.is_active %}✓{% else %}-{% endif %}</th>
+    <th>{% if user_summary.is_invited %}✓{% else %}-{% endif %}</th>
+    <th>{% if user_summary.is_accepted %}✓{% else %}-{% endif %}</th>
+    <th>{% if user_summary.is_declined %}✓{% else %}-{% endif %}</th>
+</tr>

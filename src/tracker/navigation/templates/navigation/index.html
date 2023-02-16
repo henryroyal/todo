@@ -1,0 +1,64 @@
+{% extends "navigation/base.html" %}
+
+{% block css %}
+    <link rel="stylesheet" href="/assets/custom.css">
+{% endblock %}
+
+{% block content %}
+    {% if user %}
+        <main class="container">
+            <div class="grid">
+                <form method="POST" action="{{ url_for('navigation_bp.search_post') }}">
+                    <section id="form">
+                        <input type="search" id="query" name="query" placeholder="Task Search">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                        <button type="submit">Search</button>
+                    </section>
+                </form>
+            </div>
+            {% if share_requests %}
+                <div class="grid">
+                    <h2>New Collaboration Requests</h2>
+                </div>
+                <div class="grid">
+                    <table>
+                        <tr>
+                            <th><strong>Invitation From</strong></th>
+                            <th><strong>Board</strong></th>
+                            <th><strong>Role</strong></th>
+                        </tr>
+                        {% for share in share_requests %}
+                            <tr>
+                                <th>{{ share.board_creator }}</th>
+                                <th>{{ share.board_name }}</th>
+                                <th>{{ share.role_name }}</th>
+                                <th>
+                                    <form id="delete"
+                                          action="{{ url_for("board_bp.board_users_share_accept_post",username=share.board_creator,symbol=share.board_symbol) }}"
+                                          method="post">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                        <button type="submit" name="delete" value="delete" class="share-link">accept
+                                        </button>
+                                    </form>
+                                </th>
+                                <th>
+                                    <form id="delete"
+                                          action="{{ url_for("board_bp.board_users_share_decline_post",username=share.board_creator,symbol=share.board_symbol) }}"
+                                          method="post">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                        <button type="submit" name="delete" value="delete" class="share-link">decline
+                                        </button>
+                                    </form>
+                                </th>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            {% endif %}
+        </main>
+    {% else %}
+        {% with allow_new_accounts=allow_new_accounts %}
+            {% include 'auth/login.html' %}
+        {% endwith %}
+    {% endif %}
+{% endblock %}

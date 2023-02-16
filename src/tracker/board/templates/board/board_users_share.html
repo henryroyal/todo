@@ -1,0 +1,29 @@
+{% extends "navigation/base.html" %}
+
+{% block content %}
+    <main class="container">
+
+        <article>
+            <div class="grid"><h2>Collaborate on the {{ symbol }} Board</h2></div>
+            <section id="form">
+                <form method="POST" action="{{ url_for('board_bp.board_users_share_post',username=username,symbol=symbol) }}">
+                    <label for="grantee">Username</label>
+                    <input type="text" id="grantee" name="grantee" placeholder="Username" required>
+                    <small>If this user exists, they will be notified and asked to accept the share.</small>
+
+                    <label for="modified">Role</label>
+                    <select id="role" name="role" required>
+                        <option value="manager">Manager</option>
+                        <option value="collaborator">Collaborator</option>
+                        <option value="viewer">Viewer</option>
+                    </select>
+
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <input type="submit" value="Create">
+
+                </form>
+            </section>
+        </article>
+
+    </main>
+{% endblock %}

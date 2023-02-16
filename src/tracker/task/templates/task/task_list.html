@@ -1,0 +1,38 @@
+{% extends "navigation/base.html" %}
+
+
+{% block content %}
+    <main class="container">
+        <div class="grid"><h2>{{ view_name }}</h2></div>
+        {% if view_name == "Tasks" %}
+            <div class="grid">
+                <section id="buttons">
+                    <a href="{{ url_for("task_bp.task_create_get") }}">
+                        <button>New Task</button>
+                    </a>
+                </section>
+            </div>
+        {% endif %}
+        <div class="grid">
+            <table>
+                <tr>
+                    <th><strong>Identifier</strong></th>
+                    <th><strong>Description</strong></th>
+                    <th><strong>Status</strong></th>
+                    <th><strong>Creator</strong></th>
+                    <th><strong>Assignee</strong></th>
+                    <th><strong>Tags</strong></th>
+                    <th><strong>Comments</strong></th>
+                    <th><strong>Updated</strong></th>
+                </tr>
+                {% if tasks %}
+                    {% for task_summary in tasks %}
+                        {% with task=task_summary %}
+                            {% include "task/task_item.html" %}
+                        {% endwith %}
+                    {% endfor %}
+                {% endif %}
+            </table>
+        </div>
+    </main>
+{% endblock %}

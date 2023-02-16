@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="description" content="#TODO">
+    <link rel="shortcut icon" href="/assets/favicon.png">
+    <link rel="stylesheet" href="/assets/pico.min.css">
+    {% block css %}{% endblock %}
+    {% block script %}{% endblock %}
+</head>
+
+<body>
+<nav class="container-fluid">
+    <ul>
+        <li><a href="{{ url_for('navigation_bp.index') }}" class="contrast"><strong>#TODO</strong></a></li>
+        {% if "username" in session %}
+            <li class="navbar_item"><a class="contrast" href="{{ url_for('board_bp.boards') }}">boards</a></li>
+            <li class="navbar_item"><a class="contrast" href="{{ url_for('task_bp.tasks') }}">tasks</a></li>
+            <li class="navbar_item"><a class="contrast" href="{{ url_for('auth_bp.settings_get') }}">settings</a></li>
+            <li class="navbar_item"><a class="contrast" href="{{ url_for('auth_bp.logout_get') }}">logout</a></li>
+        {% endif %}
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <li><mark>{{ message }}</mark></li>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    </ul>
+    </ul>
+    <ul>
+        <li>
+            <details role="list" dir="rtl">
+                <summary aria-haspopup="listbox" role="link" class="secondary">Theme</summary>
+                <ul role="listbox">
+                    <li><a href="#" data-theme-switcher="auto">Auto</a></li>
+                    <li><a href="#" data-theme-switcher="light">Light</a></li>
+                    <li><a href="#" data-theme-switcher="dark">Dark</a></li>
+                </ul>
+            </details>
+        </li>
+    </ul>
+    <script src="/assets/minimal-theme-switcher.js"></script>
+
+</nav>
+
+
+<!-- Main -->
+{% block content %}{{ csrf_token() }}{% endblock %}
+
+</body>
+
+</html>

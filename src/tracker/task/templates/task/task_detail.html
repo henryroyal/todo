@@ -1,0 +1,100 @@
+{% extends "navigation/base.html" %}
+
+{% block script %}
+    <script type="module">
+        import mermaid from '/assets/mermaid.esm.min.mjs';
+
+        mermaid.initialize({startOnLoad: true});
+    </script>
+{% endblock %}
+
+
+{% block content %}
+    <link rel="stylesheet" href="/assets/custom.css">
+    <main class="container">
+        <hgroup>
+            <h2>Edit Task</h2>
+            <nav aria-label="breadcrumb">
+                <ul>
+                    <li><a href="/boards">{{ creator.username }}</a></li>
+                    <li>
+                        <a href="{{ url_for("task_bp.tasks_by_board", username=creator.username,symbol=board.symbol) }}">{{ board.symbol }}</a>
+                    </li>
+                    <li><a href="">{{ task.number }}</a></li>
+                </ul>
+            </nav>
+        </hgroup>
+        <article>
+
+            <div>
+                <form id="edittask" method="POST"
+                      action="{{ url_for('task_bp.task_detail_post',
+                          username=board.creator.username,
+                          symbol=board.symbol, number=task.number) }}">
+
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" placeholder="{{ task.title }}">
+
+                    <label for="assignee">Assignee</label>
+                    <select id="assignee" name="assignee">
+                        {% for possible_assignee in possible_assignees %}
+                            {% if possible_assignee == assignee %}
+                                <option value="{{ possible_assignee }}" selected>{{ possible_assignee }}</option>
+                            {% else %}
+                                <option value="{{ possible_assignee }}">{{ possible_assignee }}</option>
+                            {% endif %}
+                        {% endfor %}
+                        {% if assignee %}
+                            <option value="">Unassigned</option>
+                        {% else %}
+                            <option value="" selected>Unassigned</option>
+                        {% endif %}
+                    </select>
+                    <small>Select the user to assign this task to.</small>
+
+                    <label for="status">Status</label>
+                    <select id="status" name="status" required>
+                        <option value="{{ task.status.name }}" selected>
+                            {{ task.status.name }}
+                        </option>
+                        {% for status_option in task.possible_statuses %}
+                            <option value="{{ status_option.name }}">{{ status_option.name }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <label for="created">Description</label>
+                    <textarea id="body" name="body" form="edittask">{{ task.body }}</textarea>
+
+                    <label for="created">Created</label>
+                    <input type="text" id="created" name="created"
+                           placeholder="{{ task.created | format_epoch_timestamp_as_datetime }}" readonly>
+
+                    <label for="modified">Modified</label>
+                    <input type="text" id="modified" name="modified"
+                           placeholder="{{ task.modified | format_epoch_timestamp_as_datetime }}" readonly>
+
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <button type="submit" class="contrast outline">Submit</button>
+                </form>
+                <form id="newcomment" method="POST"
+                      action="{{ url_for('task_bp.task_new_comment',username=board.creator.username,symbol=board.symbol,number=task.number) }}">
+
+                    <label for="contents">Comment</label>
+                    <textarea id="contents" name="contents" form="newcomment" placeholder="..."></textarea>
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <button type="submit" class="contrast outline">Add Comment</button>
+                </form>
+
+            </div>
+        </article>
+        <h3>Task Comments</h3>
+        {% for comment in task.comments %}
+            <div>
+                {% with board=board,task=task,comment=comment %}
+                    {% include "task/task_comment_item.html" %}
+                {% endwith %}
+            </div>
+        {% endfor %}
+
+    </main>
+{% endblock %}

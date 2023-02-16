@@ -1,0 +1,24 @@
+{% extends "navigation/base.html" %}
+
+{% block content %}
+    <main class="container">
+        <article>
+            <div class="grid"><h2>New Board</h2></div>
+            <section id="form">
+                <form method="POST" action="{{ url_for('board_bp.board_create_post') }}">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" placeholder="Board Name">
+                    <small>Descriptive name for a collection of tasks.</small>
+
+                    <label for="symbol">Symbol</label>
+                    <input type="text" id="symbol" name="symbol" placeholder="Board Symbol">
+                    <small>Short string of characters to quickly identify board.</small>
+
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <input type="submit" value="Create">
+
+                </form>
+            </section>
+        </article>
+    </main>
+{% endblock %}

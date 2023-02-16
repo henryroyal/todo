@@ -1,0 +1,33 @@
+{% extends "navigation/base.html" %}
+
+{% block content %}
+    <main class="container">
+        <article>
+            <div class="grid"><h2>New Task</h2></div>
+            <section id="form">
+                <form id="createtask" method="POST" action="{{ url_for('task_bp.task_create_post') }}">
+                    <label for="description">Board</label>
+                    <select id="board" name="board" required>
+                        {% for board in user_boards %}
+                            <option value="{{ board.creator }}/{{ board.symbol }}">{{ board.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <small>Select the board this task belongs to.</small>
+
+                    <label for="title">Title</label>
+                    <input type="text" id="title" name="title" placeholder="Task Title">
+                    <small>Short task title.</small>
+
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" form="createtask"
+                              placeholder="Task Description"></textarea>
+                    <small>Description of the work to be done.</small>
+
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                    <input type="submit" value="Create">
+
+                </form>
+            </section>
+        </article>
+    </main>
+{% endblock %}

@@ -1,0 +1,5 @@
+anosql>=1.0.2
+flask>=2.2.2
+flask-session>=0.4.0
+flask-wtf>=1.1.1
+pytz

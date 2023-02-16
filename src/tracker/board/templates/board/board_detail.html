@@ -1,0 +1,52 @@
+{% extends "navigation/base.html" %}
+
+{% block content %}
+    <main class="container">
+            <hgroup><h2>Edit Board</h2></hgroup>
+            <nav aria-label="breadcrumb">
+                <ul>
+                    <li><a href="/boards">{{ creator.username }}</a></li>
+                    <li>
+                        <a href="{{ url_for("task_bp.tasks_by_board", username=creator.username,symbol=board.symbol) }}">{{ board.symbol }}</a>
+                    </li>
+                </ul>
+            </nav>
+        <div class="grid">
+            <article>
+                <div class="container-fluid">
+                    <span>
+                        <form method="POST"
+                              action="{{ url_for('board_bp.board_detail_post', username=board.creator.username, symbol=board.symbol) }}">
+                        <label for="symbol">Symbol</label>
+                        <input type="text" id="symbol" name="symbol" placeholder="{{ board.symbol }}">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" placeholder="{{ board.name }}">
+                        <label for="status">Status</label>
+                        <select id="status" name="status" required>
+                            <option value="{{ board.current_status.name }}" selected>
+                                {{ board.current_status.name }}
+                            </option>
+                            {% for status_option in board.possible_statuses %}
+                                <option value="{{ status_option.name }}">{{ status_option.name }}</option>
+                            {% endfor %}
+                        </select>
+
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                        <button type="submit" class="contrast outline">Submit</button>
+                    </form>
+
+                    <form method="POST"
+                          action="{{ url_for('board_bp.board_delete_post', username=board.creator.username, symbol=board.symbol) }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                        <button type="submit" class="secondary outline">Delete Board</button>
+                    </form>
+                    </span>
+                    <span>
+                        <!--- <h2>Board Users</h2> --->
+                    </span>
+                </div>
+
+            </article>
+        </div>
+    </main>
+{% endblock %}

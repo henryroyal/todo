@@ -1,0 +1,22 @@
+{% extends "navigation/base.html" %}
+
+{% block content %}
+    <main class="container">
+        <h2>Create New User</h2>
+        <div class="grid" style="width: 30%">
+            <form method="POST" action="{{ url_for('auth_bp.signup_post') }}">
+                <input type="text" name="username" placeholder="Login" aria-label="Login" autocomplete="nickname"
+                       required>
+                <input type="password" name="password" placeholder="Password" aria-label="Password"
+                       autocomplete="current-password" required>
+                <input type="password" name="password_confirmation" placeholder="Confirm Password"
+                       aria-label="Confirm Password"
+                       autocomplete="current-password" required>
+
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+
+                <button type="submit" class="contrast">Create User</button>
+            </form>
+        </div>
+    </main>
+{% endblock %}

@@ -1,0 +1,20 @@
+<tr>
+    <th>
+        <strong>
+            <a href="/boards/{{ board.creator }}/{{ board.symbol }}">{{ board.symbol }}</a>
+        </strong>
+    </th>
+    <th>{{ board.name }}</th>
+    <th>{{ board.status }}</th>
+    <th>{{ board.creator }}</th>
+    <th>{{ board.role }}</th>
+    <th>
+        <div>
+            <a href="/tasks/{{ board.creator }}/{{ board.symbol }}" class="contrast">{{ board.task_count }}</a>
+        </div>
+    </th>
+    <th>
+        <a href="/boards/{{ board.creator }}/{{ board.symbol }}/users" class="contrast">{{ board.user_count }}</a>
+    </th>
+    <th>{{ board.last_updated | format_epoch_timestamp_as_date }}</th>
+</tr>

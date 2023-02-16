@@ -1,0 +1,23 @@
+<tr>
+    <th>{{ user[0] }}</th>
+    <th>{% if user[1] %}✓{% else %}-{% endif %}</th>
+    <th>{% if user[2] %}✓{% else %}-{% endif %}</th>
+    <th>{{ user[3] | format_epoch_timestamp_as_datetime }}</th>
+    <th>{{ user[4] }}</th>
+    <th>{{ user[5] }}</th>
+    <th><a href="">reset</a></th>
+    <th>
+        {% if user[2] %}
+            <a href="">deactivate</a>
+        {% else %}
+            <a href="">activate</a>
+        {% endif %}
+    </th>
+    <th>
+        {% if user[1] == True %}
+            <a href="">revoke</a>
+        {% else %}
+            <a href="">grant</a>
+        {% endif %}
+    </th>
+</tr>

@@ -1,0 +1,72 @@
+{% extends "navigation/base.html" %}
+
+{% block content %}
+    <main class="container">
+        <div class="grid">
+            <hgroup>
+                <h2>Settings</h2>
+                <p>
+                    {% if current_user.is_admin %}
+                        and Admin panel
+                    {% endif %}
+                </p>
+            </hgroup>
+        </div>
+
+        <div class="grid">
+            <p><b>Current User:</b> {{ current_user.username }}</p>
+        </div>
+        <div class="grid">
+            <p><b>Created:</b> {{ current_user.created | format_epoch_timestamp_as_datetime }}</p>
+        </div>
+        <div class="grid">
+            <p><b>Modified:</b> {{ current_user.modified | format_epoch_timestamp_as_datetime }}</p>
+        </div>
+
+        {% if current_user.is_admin %}
+            <div class="grid">
+                <table>
+                    <tr>
+                        <th>User</th>
+                        <th>Admin</th>
+                        <th>Active</th>
+                        <th>Last Modified</th>
+                        <th>Tasks</th>
+                        <th>Boards</th>
+                        <th>Reset Password</th>
+                        <th>Toggle Active</th>
+                        <th>Toggle Admin</th>
+                    </tr>
+                    {% for user in all_users %}
+                        {% with user=user %}
+                            {% include "auth/user.html" %}
+                        {% endwith %}
+
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
+
+        <div class="grid">
+            <section id="buttons">
+                <a href="/auth/settings/backup">
+                    <button>Change Password</button>
+                </a>
+                <a href="/auth/settings/deactivate">
+                    <button class="secondary outline">Deactivate Account</button>
+                </a>
+                {% if current_user.is_admin %}
+                    <a href="/auth/settings/backup">
+                        <button class="contrast outline">Backup Database</button>
+                    </a>
+                    <a href="/auth/settings/purge">
+                        <button class="contrast outline">Invalidate All Sessions</button>
+                    </a>
+                    <a href="/auth/settings/reindex">
+                        <button class="contrast outline">Rebuild FTS Index</button>
+                    </a>
+                {% endif %}
+            </section>
+        </div>
+    </main>
+{% endblock %}

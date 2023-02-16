@@ -1,0 +1,6 @@
+coverage
+pytest
+black
+pylint
+pytest-freezegun
+blinker

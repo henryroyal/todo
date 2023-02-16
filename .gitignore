@@ -1,0 +1,8 @@
+.vscode
+.idea
+.devcontainer
+.pytest_cache
+/tests/*/*/flask_session
+*.pyc
+todo.db
+flask_session
