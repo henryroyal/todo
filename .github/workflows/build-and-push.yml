@@ -1,0 +1,24 @@
+---
+name: build-and-push
+run-name: Build & Push
+on:
+  workflow_run:
+    workflows: [ "test-after-push" ]
+    branches: [ main ]
+    types:
+      - completed
+jobs:
+  # only run if test-after-push was success
+  if: ${{ github.event.workflow_run.conclusion == 'success' }}
+  env:
+    TAG: ${{ vars.GITHUB_RUN_NUMBER }}
+    CR_PAT: ${{ secrets.CONTAINER_REGISTRY_KEY }}
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: echo ${CR_PAT} | docker login ghcr.io -u henryroyal --password-stdin
+      - run: docker build -t todo:${TAG}
+      - run: |
+          docker push ghcr.io/henryroyal/todo:${TAG}
+          docker inspect ghcr.io/henryroyal/todo:${TAG}
