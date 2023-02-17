@@ -10,27 +10,27 @@ env:
   CR_PAT: ${{ secrets.CONTAINER_REGISTRY_KEY }}
 jobs:
   job:
-    - steps:
-        - name: lint
-          uses: actions/checkout@v3
-          run: |
-            python -m pip install --upgrade pip
-            pip install -r requirements-dev.txt
-            flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-            flake8 . --count --max-complexity=10 --max-line-length=127 --statistics
-        - name: test
-          if: ${{ success() }}
-          uses: actions/checkout@v3
-          run: |
-            python -m pip install --upgrade pip
-            pip install -r requirements.txt
-            pip install -r requirements-dev.txt
-            pytest --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
-        - name: build
-          if: ${{ success() }}
-          uses: actions/checkout@v3
-          run: |
-            echo ${CR_PAT} | docker login ghcr.io -u henryroyal --password-stdin
-            docker build -t todo:${TAG}
-            docker push ghcr.io/henryroyal/todo:${TAG}
-            docker inspect ghcr.io/henryroyal/todo:${TAG}
+    steps:
+      - name: lint
+        uses: actions/checkout@v3
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-dev.txt
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          flake8 . --count --max-complexity=10 --max-line-length=127 --statistics
+      - name: test
+        if: ${{ success() }}
+        uses: actions/checkout@v3
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+          pytest --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+      - name: build
+        if: ${{ success() }}
+        uses: actions/checkout@v3
+        run: |
+          echo ${CR_PAT} | docker login ghcr.io -u henryroyal --password-stdin
+          docker build -t todo:${TAG}
+          docker push ghcr.io/henryroyal/todo:${TAG}
+          docker inspect ghcr.io/henryroyal/todo:${TAG}
