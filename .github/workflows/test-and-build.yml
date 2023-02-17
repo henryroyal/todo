@@ -10,6 +10,7 @@ env:
   CR_PAT: ${{ secrets.CONTAINER_REGISTRY_KEY }}
 jobs:
   job:
+    runs-on: ubuntu-latest
     steps:
       - name: checkout
         uses: actions/checkout@v3
