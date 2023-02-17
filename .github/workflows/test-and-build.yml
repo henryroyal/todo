@@ -10,8 +10,8 @@ env:
   CR_PAT: ${{ secrets.CONTAINER_REGISTRY_KEY }}
 jobs:
   setup:
-    - uses: actions/checkout@v3
     - name: Setup
+      uses: actions/checkout@v3
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
