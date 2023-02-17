@@ -11,7 +11,6 @@ env:
   TAG: ${{ vars.GITHUB_RUN_NUMBER }}
   CR_PAT: ${{ secrets.CONTAINER_REGISTRY_KEY }}
 jobs:
-  if: ${{ github.event.workflow_run.conclusion == 'success' }}
   run-tests:
     runs-on: ubuntu-latest
     steps:
