@@ -1,0 +1,12 @@
+---
+name: test-and-build
+run-name: Test and Build for ${{ github.actor }}
+on: [ push ]
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: pip install -r requirements.txt
+      - run: pip install -r requirements-dev.txt
+      - run: pytest
