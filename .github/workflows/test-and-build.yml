@@ -24,12 +24,10 @@ jobs:
           flake8 . --count --max-complexity=10 --max-line-length=127 --statistics
       - name: test
         if: ${{ success() }}
-        uses: actions/checkout@v3
         run: |
           pytest --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
       - name: build
         if: ${{ success() }}
-        uses: actions/checkout@v3
         run: |
           echo ${CR_PAT} | docker login ghcr.io -u henryroyal --password-stdin
           docker build -t todo:${TAG}
