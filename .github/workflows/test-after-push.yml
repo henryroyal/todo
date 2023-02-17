@@ -1,6 +1,6 @@
 ---
-name: test-and-build
-run-name: Test and Build for ${{ github.actor }}
+name: test-after-push
+run-name: Test Changes by ${{ github.actor }}
 on: [ push ]
 jobs:
   run-tests:
@@ -10,4 +10,3 @@ jobs:
       - run: pip install -r requirements.txt
       - run: pip install -r requirements-dev.txt
       - run: pytest
-      - run: docker build -t https://ghcr.io/henryroyal/todo:${{ GITHUB_RUN_ID }} .
