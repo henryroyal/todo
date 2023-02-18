@@ -27,14 +27,10 @@ jobs:
         if: ${{ success() }}
         run: |
           pytest --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
-      - name: build
+      - name: "build & push"
         if: ${{ success() }}
         run: |
           echo ${CR_PAT} | docker login ghcr.io -u henryroyal --password-stdin
           IMAGE_NAME="ghcr.io/henryroyal/todo:$(date +%s)"
           docker build -t ${IMAGE_NAME} .
-      - name: push
-        if: ${{ success() }}
-        run: |
           docker push ${IMAGE_NAME}
-          docker inspect ${IMAGE_NAME}
