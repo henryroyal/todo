@@ -30,6 +30,7 @@ jobs:
         if: ${{ success() }}
         run: |
           echo ${CR_PAT} | docker login ghcr.io -u henryroyal --password-stdin
-          docker build -t todo:${{ vars.GITHUB_RUN_NUMBER }}
-          docker push ghcr.io/henryroyal/todo:${{ vars.GITHUB_RUN_NUMBER }}
-          docker inspect ghcr.io/henryroyal/todo:${{ vars.GITHUB_RUN_NUMBER }}
+          IMAGE_NAME="todo:$(date +%s)"
+          docker build -t ${ IMAGE_NAME }
+          docker push ghcr.io/henryroyal/${ IMAGE_NAME }
+          docker inspect ghcr.io/henryroyal/${ IMAGE_NAME }
