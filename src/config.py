@@ -9,8 +9,9 @@ MIGRATIONS = (
     Migration("task", "0000_initial_tables.sql"),
 )
 
-SECRET_KEY = environ.get("SECRET_KEY", "development")  # fixme
-PASSWORD_SALT = environ.get("PASSWORD_SALT", "Asalt")
+SECRET_KEY = environ["SECRET_KEY"]
+PASSWORD_SALT = environ["PASSWORD_SALT"]
+SERVER_NAME = environ.get("SERVER_NAME", "localhost:8000")
 ALLOW_NEW_ACCOUNTS = environ.get("ALLOW_NEW_ACCOUNTS", True)
 DATABASE_PATH = environ.get("DATABASE_PATH", "todo.db")
 DATABASE_MUTEX_TIMEOUT = int(environ.get("DATABASE_MUTEX_TIMEOUT", 30))
