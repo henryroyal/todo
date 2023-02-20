@@ -7,6 +7,8 @@ on:
       - main
 env:
   CR_PAT: ${{ secrets.CONTAINER_REGISTRY_KEY }}
+  SECRET_KEY: "test"
+  PASSWORD_SALT: "salt"
 jobs:
   job:
     name: "Lint, Test, Build, Push"
