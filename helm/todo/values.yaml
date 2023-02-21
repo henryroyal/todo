@@ -1,0 +1,7 @@
+---
+
+image: "ghcr.io/henryroyal/todo:1676907913"
+dataDir: "/app/data"
+certificateName: "todo"
+allowNewAccounts: "True"
+

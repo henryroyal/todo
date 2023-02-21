@@ -1,0 +1,38 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-deployment
+  labels:
+    app: todo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo
+  template:
+    metadata:
+      labels:
+        app: todo
+    spec:
+      volumes:
+        - name: pvc-todo-vol
+          persistentVolumeClaim:
+            claimName: pvc-todo
+      containers:
+        - name: todo
+          image: "{{ .Values.image }}"
+          env:
+            - name: SECRET_KEY
+              value: "{{ .Values.secretKey }}"
+            - name: PASSWORD_SALT
+              value: "{{ .Values.passwordSalt }}"
+            - name: ALLOW_NEW_ACCOUNTS
+              value: "{{ .Values.allowNewAccounts }}"
+            - name: DATABASE_PATH
+              value: "{{ .Values.dataDir }}/todo.db"
+          ports:
+            - containerPort: 8000
+          volumeMounts:
+            - mountPath: "{{ .Values.dataDir }}"
+              name: pvc-todo-vol

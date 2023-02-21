@@ -1,0 +1,13 @@
+apiVersion: "v2"
+name: "#todo"
+version: "0.0.1"
+description: "A lightweight task tracking application with some powerful features."
+type: "application"
+keywords:
+  - "todo"
+  - "webapp"
+home: "htts://github.com/henryroyal/todo"
+maintainers:
+  - name: "Henry Royal"
+    email: "dev@hwr.io"
+    url: "https://www.hwr.io"

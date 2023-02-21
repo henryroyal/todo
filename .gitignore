@@ -6,3 +6,4 @@
 *.pyc
 todo.db
 flask_session
+helm/values/prod.yaml
