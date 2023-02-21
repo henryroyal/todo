@@ -21,7 +21,6 @@ def client(app: Flask) -> FlaskClient:
             username="testuser",
             password=b"usertest",
         )
-
     with app.test_request_context():
         client.post(
             "/login",
