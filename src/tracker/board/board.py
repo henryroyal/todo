@@ -62,6 +62,10 @@ def board_detail_get(username: str, symbol: str):
         creator.id, symbol,
     )
 
+    if user != board.creator and not board.user_can_view(user):
+        flash("not authorized")
+        return redirect("/")
+
     return Response(
         response=render_template(
             "board/board_detail.html",
@@ -86,6 +90,10 @@ def board_detail_post(username: str, symbol: str):
     symbol = request.form.get("symbol")
     status = request.form.get("status")
 
+    if user != board.creator and not board.user_can_edit(user):
+        flash("not authorized")
+        return redirect("/")
+
     if name and name != board.name:
         board.rename_board(user, name)
     if symbol and symbol != board.symbol:
@@ -107,8 +115,12 @@ def board_delete_post(username: str, symbol: str):
 
     creator = User.select_by_username(username)
     board = Board.select_by_creator_symbol(creator.id, symbol)
-    board.delete()
 
+    if user != board.creator and not board.user_can_delete(user):
+        flash("not authorized")
+        return redirect("/")
+
+    board.delete()
     return redirect("/boards")
 
 
@@ -164,6 +176,10 @@ def board_users_list_get(username: str, symbol: str):
     if not board:
         abort(404, "board not found")
 
+    if user != board.creator and not board.user_can_view(user):
+        flash("not authorized")
+        return redirect("/")
+
     board_users = board.board_users_summary(creator)
 
     return Response(
@@ -187,6 +203,20 @@ def board_users_share_get(username: str, symbol: str):
         flash("please sign in")
         return redirect("/")
 
+    creator = User.select_by_username(username)
+    if not creator:
+        flash("unknown user")
+        return redirect("/")
+
+    board = Board.select_by_creator_symbol(creator.id, symbol)
+    if not board:
+        flash("unknown board")
+        return redirect("/")
+
+    if user != board.creator and not board.user_can_invite(user):
+        flash("not authorized")
+        return redirect("/")
+
     return Response(
         response=render_template(
             "board/board_users_share.html",
@@ -204,6 +234,20 @@ def board_users_share_post(username: str, symbol: str):
     user = User.from_flask_session(session)
     if not user:
         flash("please sign in")
+        return redirect("/")
+
+    creator = User.select_by_username(username)
+    if not creator:
+        flash("unknown user")
+        return redirect("/")
+
+    board = Board.select_by_creator_symbol(creator.id, symbol)
+    if not board:
+        flash("unknown board")
+        return redirect("/")
+
+    if user != board.creator and not board.user_can_invite(user):
+        flash("not authorized")
         return redirect("/")
 
     form_grantee = request.form.get("grantee")

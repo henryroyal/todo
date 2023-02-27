@@ -222,3 +222,151 @@ def test_board_update_status(app, client, captured_templates):
         )
         assert captured_templates[0][1]["user_boards"][0].status \
                == "in-progress"
+
+
+def test_board_unauthorized_detail_get(app, client, captured_templates):
+    with app.app_context():
+        User.create_user(
+            username="unauthorized",
+            password=b"test",
+        )
+    with app.test_request_context():
+        client.post(
+            "/boards/create",
+            data={
+                "name": "hello board",
+                "symbol": "HB"
+            }
+        )
+        client.post(
+            "/login",
+            data={
+                "username": "unauthorized",
+                "password": "test",
+            }
+        )
+        response = client.get(
+            "/boards/testuser/HB"
+        )
+
+        assert response.status_code == 302
+        assert response.location == "/"
+
+
+def test_board_unauthorized_detail_post(app, client, captured_templates):
+    with app.app_context():
+        User.create_user(
+            username="unauthorized",
+            password=b"test",
+        )
+    with app.test_request_context():
+        client.post(
+            "/boards/create",
+            data={
+                "name": "hello board",
+                "symbol": "HB"
+            }
+        )
+        client.post(
+            "/login",
+            data={
+                "username": "unauthorized",
+                "password": "test",
+            }
+        )
+        response = client.post(
+            "/boards/testuser/HB",
+            data={
+                "name": "test board",
+            }
+        )
+
+        assert response.status_code == 302
+        assert response.location == "/"
+
+
+def test_board_unauthorized_delete(app, client, captured_templates):
+    with app.app_context():
+        User.create_user(
+            username="unauthorized",
+            password=b"test",
+        )
+    with app.test_request_context():
+        client.post(
+            "/boards/create",
+            data={
+                "name": "hello board",
+                "symbol": "HB"
+            }
+        )
+        client.post(
+            "/login",
+            data={
+                "username": "unauthorized",
+                "password": "test",
+            }
+        )
+        response = client.post(
+            "/boards/testuser/HB/delete",
+        )
+
+        assert response.status_code == 302
+        assert response.location == "/"
+
+
+def test_board_unauthorized_users_list_get(app, client, captured_templates):
+    with app.app_context():
+        User.create_user(
+            username="unauthorized",
+            password=b"test",
+        )
+    with app.test_request_context():
+        client.post(
+            "/boards/create",
+            data={
+                "name": "hello board",
+                "symbol": "HB"
+            }
+        )
+        client.post(
+            "/login",
+            data={
+                "username": "unauthorized",
+                "password": "test",
+            }
+        )
+        response = client.get(
+            "/boards/testuser/HB/users",
+        )
+
+        assert response.status_code == 302
+        assert response.location == "/"
+
+
+def test_board_users_share_get(app, client, captured_templates):
+    with app.app_context():
+        User.create_user(
+            username="unauthorized",
+            password=b"test",
+        )
+    with app.test_request_context():
+        client.post(
+            "/boards/create",
+            data={
+                "name": "hello board",
+                "symbol": "HB"
+            }
+        )
+        client.post(
+            "/login",
+            data={
+                "username": "unauthorized",
+                "password": "test",
+            }
+        )
+        response = client.get(
+            "/boards/testuser/HB/users/share",
+        )
+
+        assert response.status_code == 302
+        assert response.location == "/"
