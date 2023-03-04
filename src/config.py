@@ -1,4 +1,5 @@
 from os import environ
+from distutils.util import strtobool
 
 from src.tracker.migrator import Migration
 
@@ -12,7 +13,7 @@ MIGRATIONS = (
 SECRET_KEY = environ["SECRET_KEY"]
 PASSWORD_SALT = environ["PASSWORD_SALT"]
 SESSION_COOKIE_DOMAIN = environ.get("SESSION_COOKIE_DOMAIN")
-ALLOW_NEW_ACCOUNTS = environ.get("ALLOW_NEW_ACCOUNTS", True)
+ALLOW_NEW_ACCOUNTS = strtobool(environ.get("ALLOW_NEW_ACCOUNTS", "1"))
 DATABASE_PATH = environ.get("DATABASE_PATH", "todo.db")
 DATABASE_MUTEX_TIMEOUT = int(environ.get("DATABASE_MUTEX_TIMEOUT", 30))
 
