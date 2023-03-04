@@ -2,10 +2,10 @@
 apiVersion: networking.gke.io/v1
 kind: ManagedCertificate
 metadata:
-  name: "{{ .Values.certificateName }}"
+  name: todo
 spec:
   domains:
-    - "{{ .Values.serverName }}"
+    - "{{ .Values.domainName }}"
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -16,7 +16,7 @@ metadata:
     kubernetes.io/ingress.allow-http: "false"
 spec:
   rules:
-    - host: "{{ .Values.serverName }}"
+    - host: "{{ .Values.domainName }}"
       http:
         paths:
           - pathType: ImplementationSpecific

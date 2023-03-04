@@ -1,11 +1,12 @@
 ---
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-  name: todo-deployment
+  name: todo
   labels:
     app: todo
 spec:
+  serviceName: todo
   replicas: 1
   selector:
     matchLabels:
@@ -19,14 +20,27 @@ spec:
         - name: pvc-todo-vol
           persistentVolumeClaim:
             claimName: pvc-todo
+      initContainers:
+        - name: chown-data
+          image: "{{ .Values.image }}"
+          command: [ "/bin/sh", "-c", "chown -R daemon /app/data" ]
+          volumeMounts:
+            - mountPath: "{{ .Values.dataDir }}"
+              name: pvc-todo-vol
       containers:
         - name: todo
           image: "{{ .Values.image }}"
           env:
             - name: SECRET_KEY
-              value: "{{ .Values.secretKey }}"
+              valueFrom:
+                secretKeyRef:
+                  name: todo-secret
+                  key: SECRET_KEY
             - name: PASSWORD_SALT
-              value: "{{ .Values.passwordSalt }}"
+              valueFrom:
+                secretKeyRef:
+                  name: todo-secret
+                  key: PASSWORD_SALT
             - name: ALLOW_NEW_ACCOUNTS
               value: "{{ .Values.allowNewAccounts }}"
             - name: DATABASE_PATH
