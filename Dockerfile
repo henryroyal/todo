@@ -1,6 +1,6 @@
 FROM python
 
-RUN pip install uwsgi sqlite3
+RUN pip install uwsgi
 ADD . /app
 WORKDIR /app
 RUN pip install -r requirements.txt &&  \
