@@ -103,6 +103,45 @@ set status = (select id
 where id = :board_id;
 
 
+-- name: board_user_can_view
+select count(1)
+from board_user_role bur
+where bur.board_id = :board_id
+  and bur.user_id = :user_id
+  and bur.is_accepted = 1;
+
+-- name: board_user_can_create
+select count(1)
+from board_user_role bur
+where bur.board_id = :board_id
+  and bur.user_id = :user_id
+  and bur.role_id in (0, 1)
+  and bur.is_accepted = 1;
+
+-- name: board_user_can_edit
+select count(1)
+from board_user_role bur
+where bur.board_id = :board_id
+  and bur.user_id = :user_id
+  and bur.role_id in (0, 1)
+  and bur.is_accepted = 1;
+
+-- name: board_user_can_delete
+select count(1)
+from board_user_role bur
+where bur.board_id = :board_id
+  and bur.user_id = :user_id
+  and bur.role_id in (0, 1)
+  and bur.is_accepted = 1;
+
+-- name: board_user_can_invite
+select count(1)
+from board_user_role bur
+where bur.board_id = :board_id
+  and bur.user_id = :user_id
+  and bur.role_id in (0)
+  and bur.is_accepted = 1;
+
 -- name: select_board_user
 -- fn(board_id: int, user_id: int)
 select bur.id, bur.board_id, bur.user_id, r.name

@@ -461,6 +461,71 @@ class Board:
             )
             db.commit()
 
+    def user_can_view(self, user: User) -> bool:
+        with current_app.database as db:
+            result = queries.board_user_can_view(
+                db,
+                board_id=self.id,
+                user_id=user.id,
+            )
+
+        if not result:
+            return False
+
+        return bool(result.pop(0)[0])
+
+    def user_can_create(self, user: User) -> bool:
+        with current_app.database as db:
+            result = queries.board_user_can_create(
+                db,
+                board_id=self.id,
+                user_id=user.id,
+            )
+
+        if not result:
+            return False
+
+        return bool(result.pop(0)[0])
+
+    def user_can_edit(self, user: User) -> bool:
+        with current_app.database as db:
+            result = queries.board_user_can_edit(
+                db,
+                board_id=self.id,
+                user_id=user.id,
+            )
+
+        if not result:
+            return False
+
+        return bool(result.pop(0)[0])
+
+    def user_can_delete(self, user: User) -> bool:
+        with current_app.database as db:
+            result = queries.board_user_can_delete(
+                db,
+                board_id=self.id,
+                user_id=user.id,
+            )
+
+        if not result:
+            return False
+
+        return bool(result.pop(0)[0])
+
+    def user_can_invite(self, user: User) -> bool:
+        with current_app.database as db:
+            result = queries.board_user_can_invite(
+                db,
+                board_id=self.id,
+                user_id=user.id,
+            )
+
+        if not result:
+            return False
+
+        return bool(result.pop(0)[0])
+
     def set_board_status(self, user: User, status: str) -> 'Board':
         """
         Update the board status

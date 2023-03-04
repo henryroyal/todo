@@ -122,3 +122,91 @@ def test_update_board_symbol(app):
         board = Board.new_board("?", "Board", user)
         board = board.set_board_symbol(user, "B")
         assert board.symbol == "B"
+
+
+def test_board_user_view_permission(app):
+    with app.app_context():
+        unauthorized = User.create_user("unauth", b"user")
+        viewer = User.create_user("viewer", b"user")
+        creator = User.create_user("auth", b"user")
+
+        board = Board.new_board("B", "Board", creator)
+        assert board.user_can_view(viewer) is False
+        board.set_user_role(creator, viewer, "viewer")
+        assert board.user_can_view(viewer) is False
+        board.accept_user_role(viewer.id)
+
+        assert board.user_can_view(creator) is True
+        assert board.user_can_view(viewer) is True
+        assert board.user_can_view(unauthorized) is False
+
+
+def test_board_user_create_permission(app):
+    with app.app_context():
+        unauthorized = User.create_user("unauth", b"user")
+        collaborator = User.create_user("collab", b"user")
+        creator = User.create_user("auth", b"user")
+        board = Board.new_board("B", "Board", creator)
+
+        assert board.user_can_create(collaborator) is False
+        board.set_user_role(creator, collaborator, "collaborator")
+        assert board.user_can_create(collaborator) is False
+        board.accept_user_role(collaborator.id)
+        assert board.user_can_create(collaborator) is True
+
+        assert board.user_can_create(creator) is True
+        assert board.user_can_create(unauthorized) is False
+
+
+def test_board_user_edit_permission(app):
+    with app.app_context():
+        unauthorized = User.create_user("unauth", b"user")
+        collaborator = User.create_user("collab", b"user")
+        creator = User.create_user("auth", b"user")
+        board = Board.new_board("B", "Board", creator)
+
+        assert board.user_can_edit(collaborator) is False
+        board.set_user_role(creator, collaborator, "collaborator")
+        assert board.user_can_edit(collaborator) is False
+        board.accept_user_role(collaborator.id)
+        assert board.user_can_edit(collaborator) is True
+
+        assert board.user_can_edit(creator) is True
+        assert board.user_can_edit(unauthorized) is False
+
+
+def test_board_user_delete_permission(app):
+    with app.app_context():
+        unauthorized = User.create_user("unauth", b"user")
+        collaborator = User.create_user("collab", b"user")
+        creator = User.create_user("auth", b"user")
+        board = Board.new_board("B", "Board", creator)
+
+        assert board.user_can_delete(collaborator) is False
+        board.set_user_role(creator, collaborator, "collaborator")
+        assert board.user_can_delete(collaborator) is False
+        board.accept_user_role(collaborator.id)
+        assert board.user_can_delete(collaborator) is True
+
+        assert board.user_can_delete(creator) is True
+        assert board.user_can_delete(unauthorized) is False
+
+
+def test_board_user_invite_permission(app):
+    with app.app_context():
+        unauthorized = User.create_user("unauth", b"user")
+        manager = User.create_user("collab", b"user")
+        creator = User.create_user("auth", b"user")
+        board = Board.new_board("B", "Board", creator)
+
+        board.set_user_role(creator, unauthorized, "collaborator")
+        board.accept_user_role(unauthorized.id)
+        assert board.user_can_invite(unauthorized) is False
+
+        assert board.user_can_invite(manager) is False
+        board.set_user_role(creator, manager, "manager")
+        assert board.user_can_invite(manager) is False
+        board.accept_user_role(manager.id)
+        assert board.user_can_invite(manager) is True
+
+        assert board.user_can_invite(creator) is True

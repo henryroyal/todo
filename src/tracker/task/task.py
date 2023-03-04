@@ -59,6 +59,10 @@ def tasks_by_board(username: str, symbol: str):
     board = Board.select_by_creator_symbol(creator.id, symbol)
     board_tasks = board.board_tasks(user, board.id)
 
+    if not board.user_can_view(user):
+        flash("not authorized")
+        return redirect("/")
+
     return Response(
         response=render_template(
             "task/task_list.html",
@@ -80,6 +84,11 @@ def tasks_detail_get(username: str, symbol: str, number: int):
 
     creator = User.select_by_username(username)
     board = Board.select_by_creator_symbol(creator.id, symbol)
+
+    if user != board.creator and not board.user_can_view(user):
+        flash("not authorized")
+        return redirect("/")
+
     task = board.get_task(number)
 
     assignee_username = None
@@ -118,9 +127,12 @@ def task_detail_post(username: str, symbol: str, number: int):
         flash("unknown user")
         return redirect("/")
 
-    form = request.form
-
     board = Board.select_by_creator_symbol(creator.id, symbol)
+    if user != board.creator and not board.user_can_edit(user):
+        flash("not authorized")
+        return redirect("/")
+
+    form = request.form
     task = Task.select_by_board_and_number(board.id, number)
 
     assignee = None
@@ -205,6 +217,10 @@ def task_create_post():
     if not board:
         abort(404, "board not found")
 
+    if user != board.creator and not board.user_can_edit(user):
+        flash("not authorized")
+        return redirect("/")
+
     title = request.form.get("title", "")
     body = request.form.get("description", "")
     assignee = request.form.get("assignee", None)
@@ -219,31 +235,15 @@ def task_new_comment(username: str, symbol: str, number: int):
         flash("please sign in")
         return redirect("/")
 
-    contents = request.form.get("contents", "")
     creator = User.select_by_username(username)
     board = Board.select_by_creator_symbol(creator.id, symbol)
-    board.get_task(number).new_comment(user, contents)
-    return redirect(
-        url_for(
-            "task_bp.tasks_detail_get",
-            username=username,
-            symbol=symbol,
-            number=number,
-        )
-    )
 
-
-@task_bp.post("/<username>/<symbol>/<number>/comment/<comment>/edit")
-def task_edit_comment(username: str, symbol: str, number: int, comment: int):
-    user = User.from_flask_session(session)
-    if not user:
-        flash("please sign in")
+    if user != board.creator and not board.user_can_edit(user):
+        flash("not authorized")
         return redirect("/")
 
-    contents = request.form.get("contents")
-    creator = User.select_by_username(username)
-    board = Board.select_by_creator_symbol(creator.id, symbol)
-    board.get_task(number).edit_comment(user, comment, contents)
+    contents = request.form.get("contents", "")
+    board.get_task(number).new_comment(user, contents)
     return redirect(
         url_for(
             "task_bp.tasks_detail_get",
@@ -263,6 +263,10 @@ def task_delete_comment(username: str, symbol: str, number: int, comment: int):
 
     creator = User.select_by_username(username)
     board = Board.select_by_creator_symbol(creator.id, symbol)
+    if user != board.creator and not board.user_can_edit(user):
+        flash("not authorized")
+        return redirect("/")
+
     board.get_task(number).delete_comment(user, comment)
     flash("deleted comment")
     return redirect(
