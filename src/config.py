@@ -11,7 +11,6 @@ MIGRATIONS = (
 
 SECRET_KEY = environ["SECRET_KEY"]
 PASSWORD_SALT = environ["PASSWORD_SALT"]
-SERVER_NAME = environ.get("SERVER_NAME", "localhost:8000")
 SESSION_COOKIE_DOMAIN = environ.get("SESSION_COOKIE_DOMAIN")
 ALLOW_NEW_ACCOUNTS = environ.get("ALLOW_NEW_ACCOUNTS", True)
 DATABASE_PATH = environ.get("DATABASE_PATH", "todo.db")
