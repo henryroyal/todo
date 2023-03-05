@@ -2,9 +2,9 @@ import time
 
 import pytest
 
-from src.tracker.auth.models import User
-from src.tracker.board.models import Board
-from src.tracker.task.models import Task, TaskStatus, TaskTag, TaskComment, TaskEvent, task_search
+from src.todo.auth.models import User
+from src.todo.board.models import Board
+from src.todo.task.models import Task, TaskStatus, TaskTag, TaskComment, TaskEvent, task_search
 
 
 @pytest.fixture()

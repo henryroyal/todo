@@ -9,7 +9,7 @@ from typing import List, Optional
 import anosql
 from flask import current_app
 
-from src.tracker.auth.models import User
+from src.todo.auth.models import User
 
 sql_path = os.path.join(
     pathlib.Path(__file__).parent.resolve(), "queries.sql"

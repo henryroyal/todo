@@ -6,9 +6,9 @@ Task module
 
 from datetime import datetime
 from flask import Blueprint, render_template, Response, redirect, session, flash, request, url_for, abort
-from src.tracker.auth.models import User
-from src.tracker.board.models import Board
-from src.tracker.task.models import Task
+from src.todo.auth.models import User
+from src.todo.board.models import Board
+from src.todo.task.models import Task
 
 task_bp = Blueprint(
     name="task_bp",

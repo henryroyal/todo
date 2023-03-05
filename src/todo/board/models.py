@@ -8,8 +8,8 @@ from typing import List, Optional
 import anosql
 from flask import current_app
 
-from src.tracker.auth.models import User
-from src.tracker.task.models import Task, TaskSummary
+from src.todo.auth.models import User
+from src.todo.task.models import Task, TaskSummary
 
 sql_path = os.path.join(
     pathlib.Path(__file__).parent.resolve(), "queries.sql"

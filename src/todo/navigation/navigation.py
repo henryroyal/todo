@@ -7,9 +7,9 @@ Navigation and Boilerplate module
 from sqlite3 import OperationalError
 
 from flask import Blueprint, render_template, Response, redirect, session, current_app, flash, request
-from src.tracker.task.models import task_search
-from src.tracker.auth.models import User
-from src.tracker.board.models import Board
+from src.todo.task.models import task_search
+from src.todo.auth.models import User
+from src.todo.board.models import Board
 
 navigation_bp = Blueprint(
     name="navigation_bp",

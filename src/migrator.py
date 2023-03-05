@@ -8,13 +8,14 @@ import anosql
 
 @dataclass
 class Migration:
+    application: str
     module: str
     filename: str
 
     @property
     def label(self):
         return os.path.join(
-            self.module, "migrations", self.filename,
+            self.application, self.module, "migrations", self.filename,
         )
 
     @property

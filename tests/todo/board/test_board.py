@@ -1,7 +1,7 @@
 import pytest
 
-from src.tracker.auth.models import User
-from src.tracker.board.models import Board, BoardSummary
+from src.todo.auth.models import User
+from src.todo.board.models import Board, BoardSummary
 
 
 def test_boards_list_get_empty(app, client, captured_templates):

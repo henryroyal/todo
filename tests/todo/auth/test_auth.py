@@ -1,6 +1,6 @@
 import pytest
 
-from src.tracker.auth.models import User
+from src.todo.auth.models import User
 from flask_wtf.csrf import generate_csrf
 
 

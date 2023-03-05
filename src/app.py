@@ -9,12 +9,12 @@ from flask import Flask
 from flask_session import Session
 from flask_wtf import CSRFProtect
 
-from src.tracker.auth.auth import auth_bp
-from src.tracker.board.board import board_bp
-from src.tracker.database import Database
-from src.tracker.migrator import Migrator
-from src.tracker.navigation.navigation import navigation_bp
-from src.tracker.task.task import task_bp
+from src.todo.auth.auth import auth_bp
+from src.todo.board.board import board_bp
+from src.database import Database
+from src.migrator import Migrator
+from src.todo.navigation.navigation import navigation_bp
+from src.todo.task.task import task_bp
 
 
 def create_app(config_filename: Optional[str]) -> Flask:

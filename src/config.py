@@ -1,13 +1,13 @@
 from os import environ
 from distutils.util import strtobool
 
-from src.tracker.migrator import Migration
+from src.migrator import Migration
 
 MIGRATIONS = (
-    Migration("auth", "0000_initial_tables.sql"),
-    Migration("auth", "0001_permissions_seed.sql"),
-    Migration("board", "0000_initial_tables.sql"),
-    Migration("task", "0000_initial_tables.sql"),
+    Migration("todo", "auth", "0000_initial_tables.sql"),
+    Migration("todo", "auth", "0001_permissions_seed.sql"),
+    Migration("todo", "board", "0000_initial_tables.sql"),
+    Migration("todo", "task", "0000_initial_tables.sql"),
 )
 
 SECRET_KEY = environ["SECRET_KEY"]

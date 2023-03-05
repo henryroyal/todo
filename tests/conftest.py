@@ -3,7 +3,7 @@ from flask import Flask, template_rendered
 from flask.testing import (FlaskClient, FlaskCliRunner)
 
 from src.app import create_app
-from src.tracker.auth.models import User
+from src.todo.auth.models import User
 
 
 @pytest.fixture

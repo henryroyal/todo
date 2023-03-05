@@ -1,6 +1,18 @@
-from src.tracker.auth.models import User
-from src.tracker.board.models import Board
-from src.tracker.task.models import Task
+import pytest
+
+from src.todo.auth.models import User
+from src.todo.board.models import Board
+from src.todo.task.models import Task
+
+
+@pytest.fixture
+def board(app):
+    with app.app_context():
+        user = User.select_by_username("testuser")
+        board = Board.new_board("TB", "Test Board", user)
+        board.new_task(user, "Test Task #1", "Task Description", user)
+        board.new_task(user, "Test Task #2", "Task Description", user)
+        return board
 
 
 def test_create_task_then_assign(app, client, captured_templates):
@@ -48,8 +60,22 @@ def test_create_task_then_assign(app, client, captured_templates):
         assert task.assignee_id == other_user.id
 
 
-def test_add_comment_to_task(app, client, captured_templates):
-    return
+def test_add_comment_to_task(app, client, board, captured_templates):
+    with app.test_request_context():
+        client.post(
+            "/tasks/testuser/TB/1/comment/new",
+            data={
+                "contents": "new comment",
+            }
+        )
+        response = client.get(
+            "/tasks/testuser/TB/1",
+        )
+
+        assert response.status_code == 200
+        assert len(captured_templates[0][1]["task"].comments) == 1
+
+
 
 # def test_add_existing_tag_to_task():
 #     return

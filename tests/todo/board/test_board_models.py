@@ -1,7 +1,7 @@
 import pytest
-from src.tracker.auth.models import User
-from src.tracker.board.models import Board, BoardStatus
-from src.tracker.task.models import Task
+from src.todo.auth.models import User
+from src.todo.board.models import Board, BoardStatus
+from src.todo.task.models import Task
 
 
 @pytest.mark.freeze_time("2023-01-01")
